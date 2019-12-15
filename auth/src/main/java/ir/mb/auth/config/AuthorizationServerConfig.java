@@ -60,9 +60,5 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         endpoints.tokenStore(tokenStore()).authenticationManager(authenticationManager);
     }
 
-//    @Bean("clientPasswordEncoder")
-//    PasswordEncoder clientPasswordEncoder() {
-//        return new BCryptPasswordEncoder(8);
-//    }
 
 }

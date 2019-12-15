@@ -7,7 +7,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 
 import javax.sql.DataSource;
 
-@EnableResourceServer
+
 
 @SpringBootApplication
 public class AuthApplication {

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.security.Principal;
 
 @RestController
-@RequestMapping("/rest/hello")
+@RequestMapping("/rest")
 public class HelloResource {
 
     @GetMapping("/principal")

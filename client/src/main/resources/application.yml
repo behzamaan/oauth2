@@ -24,7 +24,7 @@ security:
 #      authorities: CLIENT
       use-current-uri: false
     resource:
-      userInfoUri: http://localhost:8081/auth/rest/hello/principal
+      userInfoUri: http://localhost:8081/auth/rest/principal
 #      prefer-token-info: false
       id: resource-server-rest-api
 
