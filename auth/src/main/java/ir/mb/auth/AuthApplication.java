@@ -10,6 +10,7 @@ import javax.sql.DataSource;
 
 
 @SpringBootApplication
+
 public class AuthApplication {
 
 

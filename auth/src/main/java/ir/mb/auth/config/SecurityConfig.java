@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 
 
 @Configuration
-@EnableWebSecurity
+@Order(1)
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
