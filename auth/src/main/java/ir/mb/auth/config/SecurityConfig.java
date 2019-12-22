@@ -1,5 +1,6 @@
 package ir.mb.auth.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -12,12 +13,16 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
+import java.util.Objects;
 
 
 @Configuration
@@ -28,12 +33,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.requestMatchers()
+        http
+
+
+                .requestMatchers()
                 .antMatchers("/login", "/oauth/authorize")
+//                .antMatchers("/oauth/token")
+//                .antMatchers("/resources/**")
+//                .antMatchers("/*.js")
+//                .antMatchers("/", "/index", "/logout", "/error")
                 .and()
                 .authorizeRequests()
+                .antMatchers("/oauth/authorize").permitAll()
+                .antMatchers("/oauth/token").permitAll()
+                .antMatchers("/resources/**").permitAll()
+                .antMatchers("/login").permitAll()
+                .antMatchers("/", "/index", "/logout", "/error").permitAll()
+                .antMatchers("/*.js").permitAll()
                 .anyRequest().authenticated()
-                .and().logout().logoutUrl("/logout")
                 .and()
                 .formLogin().permitAll();
     }
@@ -56,17 +73,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
-    @Bean
-    public FilterRegistrationBean corsFilter() {
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        CorsConfiguration config = new CorsConfiguration();
-        config.setAllowCredentials(true);
-        config.addAllowedOrigin("*");
-        config.addAllowedHeader("*");
-        config.addAllowedMethod("*");
-        source.registerCorsConfiguration("/**", config);
-        FilterRegistrationBean bean = new FilterRegistrationBean(new CorsFilter(source));
-        bean.setOrder(0);
-        return bean;
-    }
 }
