@@ -4,6 +4,7 @@ import {Router} from "@angular/router";
 
 import {CookieService} from "ngx-cookie-service";
 import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
+import {Observable} from "rxjs";
 
 
 @Injectable({
@@ -46,16 +47,15 @@ export class OauthService {
   //     'Authorization': 'Bearer '+Cookie.get('access_token')});
   // var options = new RequestOptions({ headers: headers });
   //
-  // getResource(resourceUrl) : Observable<any>{
-  //   var headers =
-  //     new Headers({'Content-type': 'application/x-www-form-urlencoded; charset=utf-8',
-  //       'Authorization': 'Bearer '+Cookie.get('access_token')});
-  //   var options = new RequestOptions({ headers: headers });
-  //   return this._http.get(resourceUrl, options)
-  //     .map((res:Response) => res.json())
-  //     .catch((error:any) =>
-  //       Observable.throw(error.json().error || 'Server error'));
-  // }
+  getResource(resourceUrl) : Observable<any>{
+    const httpOptions = {
+      headers: new HttpHeaders( {
+        'Content-type': 'application/x-www-form-urlencoded; charset=utf-8',
+        'Authorization': 'Bearer '+this.cookieService.get('access_token')} )
+    };
+    return this._http.get(resourceUrl, httpOptions);
+
+  }
 
   checkCredentials(){
     if (!localStorage.getItem('access_token')){

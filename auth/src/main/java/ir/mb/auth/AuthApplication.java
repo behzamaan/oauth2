@@ -9,8 +9,8 @@ import javax.sql.DataSource;
 
 
 
+@EnableResourceServer
 @SpringBootApplication
-
 public class AuthApplication {
 
 

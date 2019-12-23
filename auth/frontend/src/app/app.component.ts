@@ -15,4 +15,11 @@ export class AppComponent {
   login() {
     this._service.obtainAccessToken(this.loginData);
   }
+
+  getReSource() {
+    this._service.getResource('http://localhost:8081/auth/rest/principal')
+      .subscribe(
+        data => console.log(data),
+        err => alert('Invalid Credentials'));
+  }
 }
