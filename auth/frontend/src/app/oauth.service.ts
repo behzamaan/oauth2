@@ -1,6 +1,9 @@
-import {Injectable} from '@angular/core';
+import {Inject, Injectable} from '@angular/core';
 import {Router} from "@angular/router";
-import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
+
+
+import {CookieService} from "ngx-cookie-service";
+import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 
 
 @Injectable({
@@ -10,33 +13,20 @@ export class OauthService {
 
 
   constructor(
-    private _router: Router, private _http: HttpClient){}
-
-
+    private _router: Router, private _http: HttpClient ,private cookieService: CookieService){}
 
   obtainAccessToken(loginData){
 
-    const p = {
-      'username': loginData.username,
-      'password': loginData.password,
-      'grant_type': 'password',
-      'client_id': 'fooClientIdPassword',
-      'secret': 'secret',
-    };
-
-
     const param = new HttpParams()
-    .set('username', 'mb')
-    .set('password', 'mb')
-    .set('grant_type', 'password')
+    .set('username', loginData.username)
+    .set('password', loginData.password)
+    .set('grant_type', 'password');
 
     const httpOptions = {
       headers: new HttpHeaders( {
         'Content-type': 'application/x-www-form-urlencoded; charset=utf-8',
         'Authorization': 'basic '+btoa('fooClientIdPassword:secret')} )
     };
-
-
 
     console.log(param.toString());
     this._http.post('http://localhost:8081/auth/oauth/token',
@@ -48,11 +38,14 @@ export class OauthService {
 
   saveToken(token){
     var expireDate = new Date().getTime() + (1000 * token.expires_in);
-    // document.cookie("access_token", token.access_token, expireDate);
-    localStorage.setItem("access_token", token.access_token);
+    this.cookieService.set( "access_token", token.access_token , expireDate);
     this._router.navigate(['/']);
   }
-
+  // var headers =
+  //   new Headers({'Content-type': 'application/x-www-form-urlencoded; charset=utf-8',
+  //     'Authorization': 'Bearer '+Cookie.get('access_token')});
+  // var options = new RequestOptions({ headers: headers });
+  //
   // getResource(resourceUrl) : Observable<any>{
   //   var headers =
   //     new Headers({'Content-type': 'application/x-www-form-urlencoded; charset=utf-8',
@@ -71,8 +64,7 @@ export class OauthService {
   }
 
   logout() {
-    // Cookie.delete('access_token');
-    localStorage.clear();
+    this.cookieService.delete('access_token');
     this._router.navigate(['/login']);
   }
 
